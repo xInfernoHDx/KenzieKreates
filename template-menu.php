@@ -1,0 +1,150 @@
+<?php
+/**
+ * Menu page (/menu/): full menu from inc/menu-data.php + custom order form.
+ */
+
+$kk       = kk_config();
+$kk_menu  = kk_menu();
+$inquiry  = get_query_var( 'inquiry' );
+
+get_header();
+?>
+
+<section class="section section--flush-bottom">
+	<div class="container">
+		<div class="section-heading">
+			<h1>Our Delicious Menu</h1>
+			<p>Indulge in a delightful array of handcrafted baked goods and sweet treats. Perfect for any occasion, with a variety of flavors and options to satisfy your cravings.</p>
+			<p class="menu-cat-tagline"><?php echo esc_html( $kk['allergen_note'] ); ?></p>
+		</div>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<?php foreach ( $kk_menu as $cat_key => $cat ) : ?>
+			<div class="menu-cat" id="<?php echo esc_attr( $cat_key ); ?>">
+				<div class="menu-cat-head">
+					<h2><?php echo esc_html( $cat['title'] ); ?></h2>
+					<?php if ( ! empty( $cat['dozen'] ) ) : ?>
+						<span class="dozen-chip">A dozen: <?php echo esc_html( $cat['dozen'] ); ?></span>
+					<?php endif; ?>
+				</div>
+				<p class="menu-cat-tagline"><?php echo esc_html( $cat['tagline'] ); ?></p>
+
+				<?php
+				$photo_items = array();
+				foreach ( $cat['items'] as $item ) {
+					if ( ! empty( $item['image'] ) ) {
+						$photo_items[] = $item;
+					}
+				}
+				?>
+				<?php if ( $photo_items ) : ?>
+					<div class="menu-cat-photos">
+						<?php foreach ( $photo_items as $item ) : ?>
+							<figure class="menu-photo-card">
+								<?php kk_stock_img( $item['image'], esc_attr( $item['name'] ) ); ?>
+								<figcaption class="menu-photo-caption"><?php echo esc_html( $item['name'] ); ?></figcaption>
+							</figure>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<ul class="menu-items">
+					<?php foreach ( $cat['items'] as $item ) : ?>
+						<li class="menu-item">
+							<span class="menu-item-name">
+								<?php echo esc_html( $item['name'] ); ?>
+								<?php if ( ! empty( $item['note'] ) ) : ?>
+									<span class="menu-item-note">(<?php echo esc_html( $item['note'] ); ?>)</span>
+								<?php endif; ?>
+								<?php if ( ! empty( $item['sold_out'] ) ) : ?>
+									<span class="sold-out-badge">Sold out</span>
+								<?php endif; ?>
+							</span>
+							<span class="menu-item-dots" aria-hidden="true"></span>
+							<span class="menu-item-price"><?php echo esc_html( $item['price'] ); ?> <small><?php echo esc_html( $item['per'] ); ?></small></span>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</section>
+
+<section class="section section--tint" id="custom-orders">
+	<div class="container">
+		<div class="section-heading">
+			<h2>Custom Orders &amp; Inquiries</h2>
+			<p>Looking for something specific? We love creating custom orders for birthdays, weddings, and special events. Tell us your vision below, or reach us directly, and we will send you a personalized quote.</p>
+			<p class="contact-strip contact-strip--left">
+				<a class="contact-item" href="<?php echo esc_url( $kk['phone_href'] ); ?>">Call <?php echo esc_html( $kk['phone'] ); ?></a>
+				<a class="contact-item" href="mailto:<?php echo esc_attr( $kk['email'] ); ?>"><?php echo esc_html( $kk['email'] ); ?></a>
+			</p>
+		</div>
+
+		<?php if ( 'sent' === $inquiry ) : ?>
+			<div class="form-msg form-msg--success" role="status">Thank you! Your inquiry is on its way. We will get back to you within a day or two to talk details.</div>
+		<?php elseif ( 'error' === $inquiry ) : ?>
+			<div class="form-msg form-msg--error" role="alert">Something went wrong sending your inquiry. Please try again, or email us directly at <?php echo esc_html( $kk['email'] ); ?>.</div>
+		<?php endif; ?>
+
+		<form class="inquiry-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="kk_inquiry">
+			<?php wp_nonce_field( 'kk_inquiry', 'kk_inquiry_nonce' ); ?>
+
+			<p class="hp-field" aria-hidden="true">
+				<label for="kk_website">Leave this field empty</label>
+				<input type="text" id="kk_website" name="kk_website" tabindex="-1" autocomplete="off">
+			</p>
+
+			<div class="form-grid">
+				<div class="form-field">
+					<label for="kk_name">Your name *</label>
+					<input type="text" id="kk_name" name="kk_name" required autocomplete="name">
+				</div>
+				<div class="form-field">
+					<label for="kk_email">Email *</label>
+					<input type="email" id="kk_email" name="kk_email" required autocomplete="email">
+				</div>
+				<div class="form-field">
+					<label for="kk_phone">Phone</label>
+					<input type="tel" id="kk_phone" name="kk_phone" autocomplete="tel">
+				</div>
+				<div class="form-field">
+					<label for="kk_occasion">Occasion</label>
+					<input type="text" id="kk_occasion" name="kk_occasion" placeholder="Birthday, wedding, just because...">
+				</div>
+				<div class="form-field">
+					<label for="kk_date">When do you need it?</label>
+					<input type="date" id="kk_date" name="kk_date">
+				</div>
+				<div class="form-field">
+					<label for="kk_servings">How many people or pieces?</label>
+					<input type="text" id="kk_servings" name="kk_servings" placeholder="e.g. 2 dozen, 25 guests">
+				</div>
+				<div class="form-field form-field--full">
+					<label for="kk_budget">Budget (optional)</label>
+					<input type="text" id="kk_budget" name="kk_budget" placeholder="A range is fine">
+				</div>
+				<div class="form-field form-field--full">
+					<label for="kk_message">Tell us your vision *</label>
+					<span class="hint">Colors, theme, flavors, anything you have in mind.</span>
+					<textarea id="kk_message" name="kk_message" rows="5" required></textarea>
+				</div>
+			</div>
+
+			<p class="form-note"><?php echo esc_html( $kk['deposit_note'] ); ?></p>
+			<button type="submit" class="btn btn--primary">Send My Inquiry</button>
+		</form>
+	</div>
+</section>
+
+<section class="section">
+	<div class="container">
+		<?php kk_disclosure(); ?>
+	</div>
+</section>
+
+<?php get_footer(); ?>

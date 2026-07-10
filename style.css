@@ -1,0 +1,12 @@
+/*
+Theme Name: Kenzy Kreates
+Theme URI: https://github.com/xInfernoHDx/KenzieKreates
+Author: xInfernoHDx
+Author URI: https://github.com/xInfernoHDx
+Description: Custom WordPress theme for Kenzy Kreates, a Florida cottage bakery by Adam and McKenzie. Baked treats and sweets, made to order.
+Version: 1.0.0
+Requires PHP: 7.4
+Text Domain: kenzy-kreates
+*/
+
+/* Styles live in assets/css/custom.css, enqueued via functions.php. */
