@@ -218,6 +218,80 @@ function kk_disclosure() {
 	);
 }
 
+/* ---------- Falling treats background ---------- */
+
+/**
+ * Sitewide falling-treats decor: cupcakes with candles, cookies, brownies,
+ * and sprinkles raining slowly behind the content. Fixed layer at z-index -1,
+ * so it shows only in blank background space and hides behind opaque cards
+ * and tinted sections. Decorative only: aria-hidden, pointer-events none,
+ * removed entirely under prefers-reduced-motion (see custom.css).
+ */
+function kk_falling_treats() {
+	$svgs = array(
+		'cupcake' => '<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg">'
+			. '<ellipse cx="20" cy="4" rx="2.4" ry="3.6" fill="#ecc35c"/>'
+			. '<rect x="18.4" y="6" width="3.2" height="9" rx="1.6" fill="#bfa1e8"/>'
+			. '<path d="M7 26q0-12 13-12t13 12z" fill="#f6c7db"/>'
+			. '<path d="M7 26h26l-3.5 15q-.6 4-4 4h-11q-3.4 0-4-4z" fill="#ec93bb"/>'
+			. '</svg>',
+		'cookie'  => '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">'
+			. '<circle cx="20" cy="20" r="17" fill="#e6b566"/>'
+			. '<circle cx="13" cy="14" r="2.2" fill="#7a4a2d"/>'
+			. '<circle cx="24" cy="11" r="2.2" fill="#7a4a2d"/>'
+			. '<circle cx="27" cy="22" r="2.2" fill="#7a4a2d"/>'
+			. '<circle cx="16" cy="26" r="2.2" fill="#7a4a2d"/>'
+			. '<circle cx="22" cy="30" r="2" fill="#7a4a2d"/>'
+			. '</svg>',
+		'brownie' => '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">'
+			. '<rect x="5" y="8" width="30" height="26" rx="5" fill="#6b4230"/>'
+			. '<path d="M5 13q0-5 5-5h20q5 0 5 5v4H5z" fill="#8a5a41"/>'
+			. '<circle cx="15" cy="25" r="1.6" fill="#a97c5e"/>'
+			. '<circle cx="25" cy="28" r="1.4" fill="#a97c5e"/>'
+			. '</svg>',
+	);
+
+	$treats = array(
+		array( 'type' => 'cupcake',  'x' => '4%',  'size' => 38, 'dur' => 26, 'delay' => 0,   'op' => 0.42, 'drift' => '4vw',  'spin' => '18deg' ),
+		array( 'type' => 'sprinkle', 'x' => '9%',  'size' => 16, 'dur' => 19, 'delay' => -7,  'op' => 0.38, 'drift' => '-3vw', 'spin' => '220deg',  'c' => 'var(--sprk-teal)', 'mhide' => true ),
+		array( 'type' => 'cookie',   'x' => '15%', 'size' => 30, 'dur' => 23, 'delay' => -12, 'op' => 0.40, 'drift' => '3vw',  'spin' => '-160deg' ),
+		array( 'type' => 'brownie',  'x' => '22%', 'size' => 34, 'dur' => 28, 'delay' => -4,  'op' => 0.38, 'drift' => '-4vw', 'spin' => '24deg',   'mhide' => true ),
+		array( 'type' => 'sprinkle', 'x' => '28%', 'size' => 14, 'dur' => 17, 'delay' => -9,  'op' => 0.35, 'drift' => '2vw',  'spin' => '300deg',  'c' => 'var(--sprk-gold)', 'mhide' => true ),
+		array( 'type' => 'cupcake',  'x' => '35%', 'size' => 30, 'dur' => 24, 'delay' => -16, 'op' => 0.40, 'drift' => '-3vw', 'spin' => '-20deg' ),
+		array( 'type' => 'cookie',   'x' => '43%', 'size' => 26, 'dur' => 21, 'delay' => -2,  'op' => 0.36, 'drift' => '4vw',  'spin' => '200deg',  'mhide' => true ),
+		array( 'type' => 'sprinkle', 'x' => '50%', 'size' => 15, 'dur' => 18, 'delay' => -11, 'op' => 0.35, 'drift' => '-2vw', 'spin' => '-260deg', 'c' => 'var(--sprk-lav)', 'mhide' => true ),
+		array( 'type' => 'brownie',  'x' => '57%', 'size' => 30, 'dur' => 27, 'delay' => -19, 'op' => 0.40, 'drift' => '3vw',  'spin' => '-18deg' ),
+		array( 'type' => 'cupcake',  'x' => '64%', 'size' => 42, 'dur' => 29, 'delay' => -6,  'op' => 0.44, 'drift' => '-5vw', 'spin' => '16deg',   'mhide' => true ),
+		array( 'type' => 'sprinkle', 'x' => '71%', 'size' => 16, 'dur' => 16, 'delay' => -13, 'op' => 0.36, 'drift' => '3vw',  'spin' => '240deg',  'c' => 'var(--sprk-pink)', 'mhide' => true ),
+		array( 'type' => 'cookie',   'x' => '78%', 'size' => 32, 'dur' => 22, 'delay' => -8,  'op' => 0.42, 'drift' => '-3vw', 'spin' => '180deg' ),
+		array( 'type' => 'brownie',  'x' => '85%', 'size' => 28, 'dur' => 25, 'delay' => -15, 'op' => 0.38, 'drift' => '4vw',  'spin' => '-26deg',  'mhide' => true ),
+		array( 'type' => 'cupcake',  'x' => '92%', 'size' => 34, 'dur' => 27, 'delay' => -3,  'op' => 0.40, 'drift' => '-4vw', 'spin' => '22deg' ),
+	);
+
+	echo '<div class="treat-rain" aria-hidden="true">';
+	foreach ( $treats as $t ) {
+		$style = sprintf(
+			'--x:%s; --size:%dpx; --dur:%ds; --delay:%ds; --op:%.2f; --drift:%s; --spin:%s;%s',
+			$t['x'],
+			$t['size'],
+			$t['dur'],
+			$t['delay'],
+			$t['op'],
+			$t['drift'],
+			$t['spin'],
+			isset( $t['c'] ) ? ' --c:' . $t['c'] . ';' : ''
+		);
+		$class = 'treat treat--' . $t['type'] . ( ! empty( $t['mhide'] ) ? ' treat--m-hide' : '' );
+		printf(
+			'<span class="%s" style="%s">%s</span>',
+			esc_attr( $class ),
+			esc_attr( $style ),
+			isset( $svgs[ $t['type'] ] ) ? $svgs[ $t['type'] ] : ''
+		);
+	}
+	echo '</div>';
+}
+
 /* ---------- Custom order inquiry form handler ---------- */
 
 function kk_handle_inquiry() {

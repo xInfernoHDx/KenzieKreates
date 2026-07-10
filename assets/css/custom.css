@@ -358,6 +358,69 @@ a:hover {
   .nav-toggle { display: block; }
 }
 
+/* ---------- Falling treats background ----------
+   Fixed layer at z-index -1: visible only in blank background
+   space, hidden behind opaque cards and tinted sections.
+   Animates transform + opacity only (GPU-composited). */
+
+.treat-rain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.treat {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: var(--size);
+  opacity: 0;
+  animation: kk-treat-fall var(--dur) linear var(--delay) infinite;
+}
+
+.treat svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.treat--sprinkle {
+  height: calc(var(--size) * 0.32);
+  border-radius: var(--r-pill);
+  background: var(--c, var(--sprk-pink));
+}
+
+@keyframes kk-treat-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--op);
+  }
+  94% {
+    opacity: var(--op);
+  }
+  100% {
+    transform: translate3d(var(--drift), 112vh, 0) rotate(var(--spin));
+    opacity: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .treat--m-hide {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .treat-rain {
+    display: none;
+  }
+}
+
 /* ---------- Sprinkle decor (static, decorative only) ---------- */
 
 .sprinkles {

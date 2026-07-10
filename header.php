@@ -14,6 +14,7 @@ $kk = kk_config();
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<?php kk_falling_treats(); ?>
 
 <a class="screen-reader-text" href="#main">Skip to content</a>
 
