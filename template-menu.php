@@ -68,6 +68,9 @@ get_header();
 							data-item-id="<?php echo esc_attr( kk_item_id( $cat_key, $item['name'] ) ); ?>"
 							data-item-name="<?php echo esc_attr( $item['name'] . ( ! empty( $item['note'] ) ? ' (' . $item['note'] . ')' : '' ) ); ?>"
 							data-item-price="<?php echo esc_attr( kk_item_price_num( $item['price'] ) ); ?>"
+							<?php if ( ! empty( $item['custom_note'] ) ) : ?>
+							data-item-note-prompt="<?php echo esc_attr( $item['custom_note'] ); ?>"
+							<?php endif; ?>
 							<?php endif; ?>
 						>
 							<span class="menu-item-name">
@@ -188,6 +191,7 @@ get_header();
 		<input type="hidden" name="action" value="kk_order">
 		<?php wp_nonce_field( 'kk_order', 'kk_order_nonce' ); ?>
 		<input type="hidden" name="kk_cart_json" id="cartJson" value="">
+		<input type="hidden" name="kk_item_notes_json" id="cartNotesJson" value="">
 
 		<p class="hp-field" aria-hidden="true">
 			<label for="kk_website_order">Leave this field empty</label>

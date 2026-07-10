@@ -399,6 +399,13 @@ function kk_handle_order() {
 
 	$cart = json_decode( $json, true );
 
+	// Optional per-item notes (e.g. decoration requests), keyed by item id.
+	$notes_json = isset( $_POST['kk_item_notes_json'] ) ? wp_unslash( $_POST['kk_item_notes_json'] ) : '';
+	$item_notes = json_decode( $notes_json, true );
+	if ( ! is_array( $item_notes ) ) {
+		$item_notes = array();
+	}
+
 	if ( '' === $name || ! is_email( $email ) || ! is_array( $cart ) || empty( $cart ) ) {
 		wp_safe_redirect( add_query_arg( 'order_status', 'error', $back ) . '#order-status' );
 		exit;
@@ -417,7 +424,7 @@ function kk_handle_order() {
 			$price = kk_item_price_num( $item['price'] );
 			$line  = $qty * $price;
 			$total += $line;
-			$lines[] = sprintf(
+			$line_text = sprintf(
 				'%d x %s%s @ %s = $%s',
 				$qty,
 				$item['name'],
@@ -425,6 +432,14 @@ function kk_handle_order() {
 				$item['price'],
 				number_format( $line, 2 )
 			);
+			// Attach the customer's decoration/customization request, if any.
+			if ( ! empty( $item['custom_note'] ) && ! empty( $item_notes[ $id ] ) && is_string( $item_notes[ $id ] ) ) {
+				$item_note = sanitize_textarea_field( mb_substr( $item_notes[ $id ], 0, 1000 ) );
+				if ( '' !== $item_note ) {
+					$line_text .= "\n    Customer request: " . $item_note;
+				}
+			}
+			$lines[] = $line_text;
 		}
 	}
 

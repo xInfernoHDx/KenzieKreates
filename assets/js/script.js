@@ -102,6 +102,7 @@ document.documentElement.classList.add('has-js');
   var closeBtn = document.getElementById('cartClose');
   var linesEl = document.getElementById('cartLines');
   var jsonInput = document.getElementById('cartJson');
+  var notesInput = document.getElementById('cartNotesJson');
   var form = document.getElementById('cartForm');
   var submitBtn = document.getElementById('cartSubmit');
 
@@ -110,10 +111,14 @@ document.documentElement.classList.add('has-js');
   }
 
   var STORAGE_KEY = 'kk_cart';
+  var NOTES_KEY = 'kk_cart_notes';
 
   // After a successful order, the server renders the success message: clear the cart.
   if (document.querySelector('.order-msg--success')) {
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(NOTES_KEY);
+    } catch (e) { /* storage unavailable */ }
   }
 
   // Catalog from the DOM (names/prices rendered server-side from menu data).
@@ -122,6 +127,7 @@ document.documentElement.classList.add('has-js');
     catalog[el.getAttribute('data-item-id')] = {
       name: el.getAttribute('data-item-name'),
       price: parseFloat(el.getAttribute('data-item-price')) || 0,
+      notePrompt: el.getAttribute('data-item-note-prompt') || '',
       el: el
     };
   });
@@ -137,6 +143,21 @@ document.documentElement.classList.add('has-js');
       }
     });
   } catch (e) { cart = {}; }
+
+  // Per-item customization notes (only for items whose menu entry asks for one).
+  var itemNotes = {};
+  try {
+    var savedNotes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}');
+    Object.keys(savedNotes).forEach(function (id) {
+      if (catalog[id] && catalog[id].notePrompt && typeof savedNotes[id] === 'string' && savedNotes[id]) {
+        itemNotes[id] = savedNotes[id].slice(0, 1000);
+      }
+    });
+  } catch (e) { itemNotes = {}; }
+
+  function saveNotes() {
+    try { localStorage.setItem(NOTES_KEY, JSON.stringify(itemNotes)); } catch (e) { /* storage unavailable */ }
+  }
 
   function money(n) {
     return '$' + n.toFixed(2);
@@ -187,6 +208,35 @@ document.documentElement.classList.add('has-js');
     li.appendChild(name);
     li.appendChild(qtyWrap);
     li.appendChild(total);
+
+    // Customization request box for items that ask for one (e.g. decorated cookies).
+    if (entry.notePrompt) {
+      var noteLabel = document.createElement('label');
+      noteLabel.className = 'cart-line-note';
+
+      var promptSpan = document.createElement('span');
+      promptSpan.className = 'cart-line-note-prompt';
+      promptSpan.textContent = entry.notePrompt;
+
+      var noteBox = document.createElement('textarea');
+      noteBox.rows = 2;
+      noteBox.maxLength = 1000;
+      noteBox.placeholder = 'Colors, theme, characters, the occasion...';
+      noteBox.value = itemNotes[id] || '';
+      noteBox.addEventListener('input', function () {
+        var v = noteBox.value.slice(0, 1000);
+        if (v.trim()) {
+          itemNotes[id] = v;
+        } else {
+          delete itemNotes[id];
+        }
+        saveNotes();
+      });
+
+      noteLabel.appendChild(promptSpan);
+      noteLabel.appendChild(noteBox);
+      li.appendChild(noteLabel);
+    }
     return li;
   }
 
@@ -230,6 +280,9 @@ document.documentElement.classList.add('has-js');
     }
 
     jsonInput.value = JSON.stringify(cart);
+    if (notesInput) {
+      notesInput.value = JSON.stringify(itemNotes);
+    }
     if (submitBtn) {
       submitBtn.disabled = count === 0;
     }
@@ -240,6 +293,8 @@ document.documentElement.classList.add('has-js');
     var next = (cart[id] || 0) + delta;
     if (next <= 0) {
       delete cart[id];
+      delete itemNotes[id];
+      saveNotes();
     } else {
       cart[id] = Math.min(999, next);
     }
@@ -306,6 +361,9 @@ document.documentElement.classList.add('has-js');
       e.preventDefault();
     }
     jsonInput.value = JSON.stringify(cart);
+    if (notesInput) {
+      notesInput.value = JSON.stringify(itemNotes);
+    }
   });
 
   render();

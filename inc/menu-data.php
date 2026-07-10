@@ -13,6 +13,9 @@
  *   image    (string)  Optional stock image stem in assets/images/stock/ (no extension).
  *                      Items with an image appear in the front-page featured grid.
  *   sold_out (bool)    Optional. true shows a "Sold out" badge and hides ordering.
+ *   custom_note (string) Optional. When set, customers who add this item to the
+ *                      cart get a text box with this prompt (e.g. decoration
+ *                      requests), included with their order email.
  *
  * Category fields:
  *   title, tagline, items, dozen (optional display price for a dozen, e.g. '$30.00').
@@ -36,10 +39,11 @@ return array(
 				'image' => 'chocolate-chip-cookies',
 			),
 			array(
-				'name'  => 'Sugar Cookies (decorated)',
-				'price' => '$3.00',
-				'per'   => 'each',
-				'image' => 'sugar-cookies-decorated',
+				'name'        => 'Sugar Cookies (decorated)',
+				'price'       => '$3.00',
+				'per'         => 'each',
+				'image'       => 'sugar-cookies-decorated',
+				'custom_note' => 'How would you like them decorated?',
 			),
 			array(
 				'name'  => 'Oatmeal Raisin',

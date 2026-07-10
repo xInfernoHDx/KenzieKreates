@@ -881,13 +881,45 @@ a:hover {
 
 .cart-line {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-3);
+  gap: var(--sp-2) var(--sp-3);
   background: var(--white);
   border: 1px solid var(--cream-200);
   border-radius: var(--r-input);
   padding: var(--sp-2) var(--sp-3);
+}
+
+.cart-line-note {
+  flex-basis: 100%;
+  display: grid;
+  gap: var(--sp-1);
+  padding-top: var(--sp-1);
+  border-top: 1px dashed var(--blush-200);
+}
+
+.cart-line-note-prompt {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--berry-600);
+}
+
+.cart-line-note textarea {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--cocoa-900);
+  background: var(--cream-50);
+  border: 1.5px solid var(--cream-300);
+  border-radius: var(--r-input);
+  padding: 0.5rem 0.7rem;
+  resize: vertical;
+}
+
+.cart-line-note textarea:focus {
+  outline: 3px solid rgba(194, 51, 112, 0.3);
+  outline-offset: 0;
+  border-color: var(--berry-500);
 }
 
 .cart-line-name {
