@@ -127,8 +127,23 @@ document.documentElement.classList.add('has-js');
     catalog[el.getAttribute('data-item-id')] = {
       name: el.getAttribute('data-item-name'),
       price: parseFloat(el.getAttribute('data-item-price')) || 0,
+      dozenPrice: parseFloat(el.getAttribute('data-item-dozen-price')) || 0,
       notePrompt: el.getAttribute('data-item-note-prompt') || '',
-      el: el
+      el: el,
+      kind: 'item'
+    };
+  });
+
+  // Category "mix and match" dozen chips.
+  var dozenChips = document.querySelectorAll('.dozen-chip--btn[data-dozen-id]');
+  dozenChips.forEach(function (chip) {
+    catalog[chip.getAttribute('data-dozen-id')] = {
+      name: chip.getAttribute('data-dozen-name'),
+      price: parseFloat(chip.getAttribute('data-dozen-price')) || 0,
+      dozenPrice: 0,
+      notePrompt: chip.getAttribute('data-dozen-note-prompt') || '',
+      el: chip,
+      kind: 'dozen'
     };
   });
 
@@ -163,6 +178,15 @@ document.documentElement.classList.add('has-js');
     return '$' + n.toFixed(2);
   }
 
+  // 12+ of one item automatically gets the category's dozen price.
+  function linePrice(id, qty) {
+    var entry = catalog[id];
+    if (entry.dozenPrice > 0 && qty >= 12) {
+      return Math.floor(qty / 12) * entry.dozenPrice + (qty % 12) * entry.price;
+    }
+    return qty * entry.price;
+  }
+
   function save() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); } catch (e) { /* storage unavailable */ }
   }
@@ -186,9 +210,17 @@ document.documentElement.classList.add('has-js');
     minus.setAttribute('aria-label', 'Remove one ' + entry.name);
     minus.innerHTML = '&#8722;';
 
-    var count = document.createElement('span');
-    count.className = 'qty-count';
-    count.textContent = cart[id];
+    var count = document.createElement('input');
+    count.type = 'number';
+    count.className = 'qty-input';
+    count.min = '0';
+    count.max = '999';
+    count.setAttribute('inputmode', 'numeric');
+    count.value = cart[id];
+    count.setAttribute('aria-label', 'Quantity of ' + entry.name);
+    count.addEventListener('change', function () {
+      setQty(id, parseInt(count.value, 10));
+    });
 
     var plus = document.createElement('button');
     plus.type = 'button';
@@ -203,11 +235,18 @@ document.documentElement.classList.add('has-js');
 
     var total = document.createElement('span');
     total.className = 'cart-line-total';
-    total.textContent = money(cart[id] * entry.price);
+    total.textContent = money(linePrice(id, cart[id]));
 
     li.appendChild(name);
     li.appendChild(qtyWrap);
     li.appendChild(total);
+
+    if (entry.kind === 'item' && entry.dozenPrice > 0 && cart[id] >= 12) {
+      var deal = document.createElement('span');
+      deal.className = 'cart-line-deal';
+      deal.textContent = 'Dozen pricing applied';
+      li.appendChild(deal);
+    }
 
     // Customization request box for items that ask for one (e.g. decorated cookies).
     if (entry.notePrompt) {
@@ -249,11 +288,22 @@ document.documentElement.classList.add('has-js');
       var el = catalog[id].el;
       var badge = el.querySelector('[data-cart-count]');
       if (badge) {
-        badge.textContent = qty;
+        if (badge.tagName === 'INPUT') {
+          // Don't clobber the field mid-typing.
+          if (document.activeElement !== badge) {
+            badge.value = qty;
+          }
+        } else {
+          badge.textContent = qty;
+        }
+      }
+      var dozenLabel = el.querySelector('[data-dozen-label]');
+      if (dozenLabel) {
+        dozenLabel.textContent = qty > 0 ? 'In cart: ' + qty : '+ Add';
       }
       el.classList.toggle('in-cart', qty > 0);
       count += qty;
-      total += qty * catalog[id].price;
+      total += linePrice(id, qty);
     });
 
     bar.hidden = count === 0;
@@ -288,31 +338,51 @@ document.documentElement.classList.add('has-js');
     }
   }
 
-  function changeQty(id, delta) {
+  function setQty(id, qty) {
     if (!catalog[id]) { return; }
-    var next = (cart[id] || 0) + delta;
-    if (next <= 0) {
+    qty = isNaN(qty) ? 0 : qty;
+    qty = Math.max(0, Math.min(999, qty));
+    if (qty === 0) {
       delete cart[id];
       delete itemNotes[id];
       saveNotes();
     } else {
-      cart[id] = Math.min(999, next);
+      cart[id] = qty;
     }
     save();
     render();
   }
 
-  // Menu rows: steppers, plus click-anywhere-on-the-row to add one.
+  function changeQty(id, delta) {
+    setQty(id, (cart[id] || 0) + delta);
+  }
+
+  // Menu rows: steppers, a typeable quantity field, and
+  // click-anywhere-on-the-row to add one.
   items.forEach(function (el) {
     var id = el.getAttribute('data-item-id');
     el.addEventListener('click', function (e) {
+      if (e.target.closest('input')) {
+        return; // typing in the quantity field, not adding
+      }
       if (e.target.closest('[data-cart-minus]')) {
         changeQty(id, -1);
-      } else if (e.target.closest('[data-cart-plus]')) {
-        changeQty(id, 1);
       } else {
         changeQty(id, 1);
       }
+    });
+    var qtyField = el.querySelector('input[data-cart-count]');
+    if (qtyField) {
+      qtyField.addEventListener('change', function () {
+        setQty(id, parseInt(qtyField.value, 10));
+      });
+    }
+  });
+
+  // Dozen chips: each click adds one mix-and-match dozen.
+  dozenChips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      changeQty(chip.getAttribute('data-dozen-id'), 1);
     });
   });
 

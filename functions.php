@@ -420,16 +420,28 @@ function kk_handle_order() {
 			if ( empty( $cart[ $id ] ) ) {
 				continue;
 			}
-			$qty = min( 999, max( 1, (int) $cart[ $id ] ) );
-			$price = kk_item_price_num( $item['price'] );
-			$line  = $qty * $price;
+			$qty   = min( 999, max( 1, (int) $cart[ $id ] ) );
+			$each  = kk_item_price_num( $item['price'] );
+			$dozen = ! empty( $cat['dozen'] ) ? kk_item_price_num( $cat['dozen'] ) : 0;
+
+			// 12+ of one item automatically gets the category's dozen price.
+			if ( $dozen > 0 && $qty >= 12 ) {
+				$dozens = intdiv( $qty, 12 );
+				$rem    = $qty % 12;
+				$line   = ( $dozens * $dozen ) + ( $rem * $each );
+				$breakdown = sprintf( '%d dozen @ %s', $dozens, $cat['dozen'] )
+					. ( $rem ? sprintf( ' + %d @ %s', $rem, $item['price'] ) : '' );
+			} else {
+				$line      = $qty * $each;
+				$breakdown = '@ ' . $item['price'];
+			}
 			$total += $line;
 			$line_text = sprintf(
-				'%d x %s%s @ %s = $%s',
+				'%d x %s%s %s = $%s',
 				$qty,
 				$item['name'],
 				! empty( $item['note'] ) ? ' (' . $item['note'] . ')' : '',
-				$item['price'],
+				$breakdown,
 				number_format( $line, 2 )
 			);
 			// Attach the customer's decoration/customization request, if any.
@@ -441,6 +453,35 @@ function kk_handle_order() {
 			}
 			$lines[] = $line_text;
 		}
+	}
+
+	// Category "mix and match" dozen lines added via the dozen chips.
+	foreach ( kk_menu() as $cat_key => $cat ) {
+		if ( empty( $cat['dozen'] ) ) {
+			continue;
+		}
+		$id = 'dozen-' . $cat_key;
+		if ( empty( $cart[ $id ] ) ) {
+			continue;
+		}
+		$qty   = min( 999, max( 1, (int) $cart[ $id ] ) );
+		$price = kk_item_price_num( $cat['dozen'] );
+		$line  = $qty * $price;
+		$total += $line;
+		$line_text = sprintf(
+			'%d x A Dozen %s (mix and match) @ %s = $%s',
+			$qty,
+			$cat['title'],
+			$cat['dozen'],
+			number_format( $line, 2 )
+		);
+		if ( ! empty( $item_notes[ $id ] ) && is_string( $item_notes[ $id ] ) ) {
+			$dozen_note = sanitize_textarea_field( mb_substr( $item_notes[ $id ], 0, 1000 ) );
+			if ( '' !== $dozen_note ) {
+				$line_text .= "\n    Customer request: " . $dozen_note;
+			}
+		}
+		$lines[] = $line_text;
 	}
 
 	if ( empty( $lines ) ) {
@@ -456,8 +497,8 @@ function kk_handle_order() {
 	$body .= 'Phone: ' . ( $phone ? $phone : 'not given' ) . "\n";
 	$body .= 'Date needed: ' . ( $date ? $date : 'not given' ) . "\n\n";
 	$body .= "Order:\n" . implode( "\n", $lines ) . "\n\n";
-	$body .= 'Estimated total (per-item pricing): $' . number_format( $total, 2 ) . "\n";
-	$body .= "Note: dozen pricing is NOT applied above; adjust when confirming.\n";
+	$body .= 'Estimated total: $' . number_format( $total, 2 ) . "\n";
+	$body .= "Dozen pricing was applied automatically where 12 or more of one item were ordered.\n";
 	if ( $note ) {
 		$body .= "\nCustomer note:\n" . $note . "\n";
 	}

@@ -36,7 +36,14 @@ get_header();
 				<div class="menu-cat-head">
 					<h2><?php echo esc_html( $cat['title'] ); ?></h2>
 					<?php if ( ! empty( $cat['dozen'] ) ) : ?>
-						<span class="dozen-chip">A dozen: <?php echo esc_html( $cat['dozen'] ); ?></span>
+						<button type="button" class="dozen-chip dozen-chip--btn"
+							data-dozen-id="<?php echo esc_attr( 'dozen-' . $cat_key ); ?>"
+							data-dozen-name="<?php echo esc_attr( 'A Dozen ' . $cat['title'] . ' (mix and match)' ); ?>"
+							data-dozen-price="<?php echo esc_attr( kk_item_price_num( $cat['dozen'] ) ); ?>"
+							data-dozen-note-prompt="Which flavors would you like in your dozen?">
+							A dozen: <?php echo esc_html( $cat['dozen'] ); ?>
+							<span class="dozen-chip-add" data-dozen-label>+ Add</span>
+						</button>
 					<?php endif; ?>
 				</div>
 				<p class="menu-cat-tagline"><?php echo esc_html( $cat['tagline'] ); ?></p>
@@ -68,6 +75,9 @@ get_header();
 							data-item-id="<?php echo esc_attr( kk_item_id( $cat_key, $item['name'] ) ); ?>"
 							data-item-name="<?php echo esc_attr( $item['name'] . ( ! empty( $item['note'] ) ? ' (' . $item['note'] . ')' : '' ) ); ?>"
 							data-item-price="<?php echo esc_attr( kk_item_price_num( $item['price'] ) ); ?>"
+							<?php if ( ! empty( $cat['dozen'] ) ) : ?>
+							data-item-dozen-price="<?php echo esc_attr( kk_item_price_num( $cat['dozen'] ) ); ?>"
+							<?php endif; ?>
 							<?php if ( ! empty( $item['custom_note'] ) ) : ?>
 							data-item-note-prompt="<?php echo esc_attr( $item['custom_note'] ); ?>"
 							<?php endif; ?>
@@ -87,7 +97,7 @@ get_header();
 							<?php if ( $orderable ) : ?>
 								<span class="menu-item-cart">
 									<button type="button" class="qty-btn" data-cart-minus aria-label="Remove one <?php echo esc_attr( $item['name'] ); ?>">&#8722;</button>
-									<span class="qty-count" data-cart-count aria-live="polite">0</span>
+									<input type="number" class="qty-input" data-cart-count inputmode="numeric" min="0" max="999" value="0" aria-label="Quantity of <?php echo esc_attr( $item['name'] ); ?>">
 									<button type="button" class="qty-btn" data-cart-plus aria-label="Add one <?php echo esc_attr( $item['name'] ); ?>">+</button>
 								</span>
 							<?php endif; ?>
@@ -185,7 +195,7 @@ get_header();
 	<h2>Your order</h2>
 	<ul class="cart-lines" id="cartLines"></ul>
 	<p class="cart-total-row">Estimated total <strong data-cart-total>$0.00</strong></p>
-	<p class="cart-fineprint">Nothing is charged online. Kenzie confirms your final total (including dozen pricing) and pickup details with you directly.</p>
+	<p class="cart-fineprint">Nothing is charged online. Dozen pricing is applied automatically when you order 12 or more of a treat. Kenzie confirms your final total and pickup details with you directly.</p>
 
 	<form class="cart-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="cartForm">
 		<input type="hidden" name="action" value="kk_order">

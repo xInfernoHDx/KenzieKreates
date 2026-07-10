@@ -790,15 +790,73 @@ a:hover {
   transform: scale(0.92);
 }
 
-.qty-count {
-  min-width: 1.4em;
+.qty-input {
+  width: 54px;
   text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--cocoa-400);
+  background: var(--white);
+  border: 1.5px solid var(--cream-300);
+  border-radius: var(--r-input);
+  padding: 0.3rem 0.2rem;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
-.in-cart .qty-count {
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.qty-input:focus {
+  border-color: var(--berry-500);
+  outline: 3px solid rgba(194, 51, 112, 0.3);
+  outline-offset: 0;
+}
+
+.in-cart .qty-input {
   color: var(--cocoa-900);
+  border-color: var(--blush-200);
+}
+
+/* ---------- Cart: dozen chips (clickable) ---------- */
+
+.dozen-chip--btn {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.dozen-chip--btn:hover {
+  background: var(--berry-600);
+  border-color: var(--berry-600);
+  color: var(--white);
+}
+
+.dozen-chip-add {
+  font-weight: 700;
+  color: var(--berry-600);
+}
+
+.dozen-chip--btn:hover .dozen-chip-add {
+  color: var(--white);
+}
+
+.dozen-chip--btn.in-cart {
+  border-color: var(--berry-500);
+}
+
+.cart-line-deal {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2e6647;
 }
 
 /* ---------- Cart: sticky bar ---------- */
