@@ -3,12 +3,21 @@
  * Menu page (/menu/): full menu from inc/menu-data.php + custom order form.
  */
 
-$kk       = kk_config();
-$kk_menu  = kk_menu();
-$inquiry  = get_query_var( 'inquiry' );
+$kk           = kk_config();
+$kk_menu      = kk_menu();
+$inquiry      = get_query_var( 'inquiry' );
+$order_status = get_query_var( 'order_status' );
 
 get_header();
 ?>
+
+<div id="order-status" class="container">
+	<?php if ( 'sent' === $order_status ) : ?>
+		<div class="form-msg form-msg--success order-msg--success" role="status" style="margin-top: 1.5rem;">Your order request is in! Kenzie will confirm the details, final total, and pickup with you within a day or two.</div>
+	<?php elseif ( 'error' === $order_status ) : ?>
+		<div class="form-msg form-msg--error" role="alert" style="margin-top: 1.5rem;">Something went wrong sending your order. Please try again, or call <?php echo esc_html( $kk['phone'] ); ?> / email <?php echo esc_html( $kk['email'] ); ?>.</div>
+	<?php endif; ?>
+</div>
 
 <section class="section section--flush-bottom">
 	<div class="container">
@@ -53,7 +62,14 @@ get_header();
 
 				<ul class="menu-items">
 					<?php foreach ( $cat['items'] as $item ) : ?>
-						<li class="menu-item">
+						<?php $orderable = empty( $item['sold_out'] ); ?>
+						<li class="menu-item<?php echo $orderable ? ' menu-item--orderable' : ''; ?>"
+							<?php if ( $orderable ) : ?>
+							data-item-id="<?php echo esc_attr( kk_item_id( $cat_key, $item['name'] ) ); ?>"
+							data-item-name="<?php echo esc_attr( $item['name'] . ( ! empty( $item['note'] ) ? ' (' . $item['note'] . ')' : '' ) ); ?>"
+							data-item-price="<?php echo esc_attr( kk_item_price_num( $item['price'] ) ); ?>"
+							<?php endif; ?>
+						>
 							<span class="menu-item-name">
 								<?php echo esc_html( $item['name'] ); ?>
 								<?php if ( ! empty( $item['note'] ) ) : ?>
@@ -65,6 +81,13 @@ get_header();
 							</span>
 							<span class="menu-item-dots" aria-hidden="true"></span>
 							<span class="menu-item-price"><?php echo esc_html( $item['price'] ); ?> <small><?php echo esc_html( $item['per'] ); ?></small></span>
+							<?php if ( $orderable ) : ?>
+								<span class="menu-item-cart">
+									<button type="button" class="qty-btn" data-cart-minus aria-label="Remove one <?php echo esc_attr( $item['name'] ); ?>">&#8722;</button>
+									<span class="qty-count" data-cart-count aria-live="polite">0</span>
+									<button type="button" class="qty-btn" data-cart-plus aria-label="Add one <?php echo esc_attr( $item['name'] ); ?>">+</button>
+								</span>
+							<?php endif; ?>
 						</li>
 					<?php endforeach; ?>
 				</ul>
@@ -146,5 +169,53 @@ get_header();
 		<?php kk_disclosure(); ?>
 	</div>
 </section>
+
+<div class="cart-bar" id="cartBar" hidden>
+	<span class="cart-bar-summary" data-cart-summary>0 items &middot; $0.00</span>
+	<button type="button" class="btn btn--primary" id="cartOpen">Review Order</button>
+</div>
+
+<div class="cart-overlay" id="cartOverlay" hidden></div>
+
+<aside class="cart-panel" id="cartPanel" aria-label="Your order" hidden>
+	<button type="button" class="cart-close" id="cartClose" aria-label="Close order panel">&times;</button>
+	<h2>Your order</h2>
+	<ul class="cart-lines" id="cartLines"></ul>
+	<p class="cart-total-row">Estimated total <strong data-cart-total>$0.00</strong></p>
+	<p class="cart-fineprint">Nothing is charged online. Kenzie confirms your final total (including dozen pricing) and pickup details with you directly.</p>
+
+	<form class="cart-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="cartForm">
+		<input type="hidden" name="action" value="kk_order">
+		<?php wp_nonce_field( 'kk_order', 'kk_order_nonce' ); ?>
+		<input type="hidden" name="kk_cart_json" id="cartJson" value="">
+
+		<p class="hp-field" aria-hidden="true">
+			<label for="kk_website_order">Leave this field empty</label>
+			<input type="text" id="kk_website_order" name="kk_website" tabindex="-1" autocomplete="off">
+		</p>
+
+		<div class="form-field">
+			<label for="order_name">Your name *</label>
+			<input type="text" id="order_name" name="kk_name" required autocomplete="name">
+		</div>
+		<div class="form-field">
+			<label for="order_email">Email *</label>
+			<input type="email" id="order_email" name="kk_email" required autocomplete="email">
+		</div>
+		<div class="form-field">
+			<label for="order_phone">Phone</label>
+			<input type="tel" id="order_phone" name="kk_phone" autocomplete="tel">
+		</div>
+		<div class="form-field">
+			<label for="order_date">When do you need it?</label>
+			<input type="date" id="order_date" name="kk_date">
+		</div>
+		<div class="form-field">
+			<label for="order_note">Anything else?</label>
+			<textarea id="order_note" name="kk_note" rows="2"></textarea>
+		</div>
+		<button type="submit" class="btn btn--primary" id="cartSubmit">Send Order Request</button>
+	</form>
+</aside>
 
 <?php get_footer(); ?>
