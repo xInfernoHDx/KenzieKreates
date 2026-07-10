@@ -54,7 +54,7 @@ add_action( 'after_setup_theme', 'kk_theme_setup' );
 function kk_enqueue_assets() {
 	wp_enqueue_style(
 		'kk-fonts',
-		'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap',
+		'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@400;500;600&display=swap',
 		array(),
 		null
 	);

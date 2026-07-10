@@ -18,7 +18,7 @@ return array(
 	// Brand + contact.
 	'business_name' => 'Kenzy Kreates',
 	'tagline'       => 'Baked Treats & Sweets',
-	'owners'        => 'Adam & McKenzie',
+	'owners'        => 'Kenzie & Adam',
 	'phone'         => '727-906-5594',
 	'phone_href'    => 'tel:+17279065594',
 	'email'         => 'kenzykreatesbakes@gmail.com',

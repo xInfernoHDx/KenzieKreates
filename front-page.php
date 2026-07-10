@@ -9,6 +9,17 @@ get_header();
 ?>
 
 <section class="hero">
+	<div class="sprinkles" aria-hidden="true">
+		<span class="sprinkle" style="--x:6%;  --y:12%; --r:24deg;  --c:var(--sprk-pink);"></span>
+		<span class="sprinkle" style="--x:14%; --y:78%; --r:-38deg; --c:var(--sprk-teal);"></span>
+		<span class="sprinkle" style="--x:31%; --y:6%;  --r:64deg;  --c:var(--sprk-gold);"></span>
+		<span class="sprinkle" style="--x:47%; --y:90%; --r:12deg;  --c:var(--sprk-lav);"></span>
+		<span class="sprinkle" style="--x:58%; --y:8%;  --r:-52deg; --c:var(--sprk-pink);"></span>
+		<span class="sprinkle" style="--x:72%; --y:16%; --r:40deg;  --c:var(--sprk-teal);"></span>
+		<span class="sprinkle" style="--x:88%; --y:70%; --r:-18deg; --c:var(--sprk-gold);"></span>
+		<span class="sprinkle" style="--x:94%; --y:34%; --r:76deg;  --c:var(--sprk-lav);"></span>
+		<span class="sprinkle" style="--x:3%;  --y:48%; --r:-64deg; --c:var(--sprk-gold);"></span>
+	</div>
 	<div class="container hero-grid">
 		<div class="hero-copy">
 			<h1>Homemade treats, baked just for your table</h1>
@@ -75,8 +86,8 @@ get_header();
 			<?php kk_stock_img( 'baker-hands', 'Hands at work baking in a home kitchen' ); ?>
 		</div>
 		<div class="reveal">
-			<h2>Baked by Adam &amp; McKenzie</h2>
-			<p>Kenzy Kreates started in our own kitchen, baking for the people we love. Now we bake for your birthdays, weddings, and everyday sweet cravings too, one made-to-order batch at a time.</p>
+			<h2>Baked by Kenzie</h2>
+			<p>Kenzy Kreates is Kenzie's home bakery. Every batch is baked to order and decorated under her lead, with Adam helping bring it all together. What started as baking for the people we love now shows up at your birthdays, weddings, and everyday sweet cravings too.</p>
 			<a class="btn btn--ghost" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Read Our Story</a>
 		</div>
 	</div>
@@ -85,6 +96,14 @@ get_header();
 <section class="section">
 	<div class="container">
 		<div class="callout reveal">
+			<div class="sprinkles" aria-hidden="true">
+				<span class="sprinkle" style="--x:8%;  --y:20%; --r:30deg;  --c:var(--sprk-pink);"></span>
+				<span class="sprinkle" style="--x:16%; --y:74%; --r:-44deg; --c:var(--sprk-gold);"></span>
+				<span class="sprinkle" style="--x:84%; --y:18%; --r:58deg;  --c:var(--sprk-teal);"></span>
+				<span class="sprinkle" style="--x:92%; --y:66%; --r:-14deg; --c:var(--sprk-lav);"></span>
+				<span class="sprinkle" style="--x:74%; --y:86%; --r:20deg;  --c:var(--sprk-pink);"></span>
+				<span class="sprinkle" style="--x:28%; --y:10%; --r:-70deg; --c:var(--sprk-teal);"></span>
+			</div>
 			<h2>Planning a celebration?</h2>
 			<p>We love creating custom orders for birthdays, weddings, and special events. Tell us your vision and we will make it a little sweeter.</p>
 			<p class="contact-strip">

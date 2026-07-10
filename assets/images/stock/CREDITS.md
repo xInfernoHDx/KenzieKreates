@@ -7,7 +7,7 @@ which permits free commercial use without attribution. Photographer credits are 
 |------|-------------|--------------|---------|
 | hero-bakes.jpg | https://www.pexels.com/photo/variety-of-baked-and-dessert-foods-on-plates-1448721/ | Julio Melanda | Pexels License |
 | chocolate-chip-cookies.jpg | https://www.pexels.com/photo/a-close-up-shot-of-chocolate-chip-cookies-14133096/ | Marcia Salido | Pexels License |
-| decorated-sugar-cookies.jpg | https://www.pexels.com/photo/festive-star-and-snowflake-cookies-on-rack-33121749/ | Hi Nana Shop | Pexels License |
+| decorated-sugar-cookies.jpg | https://www.pexels.com/photo/cookies-with-pink-cream-on-top-of-clear-short-stem-footed-mug-with-milk-162813/ | (not listed) | Pexels License (cropped to the cookie stack) |
 | cake-pops.jpg | https://www.pexels.com/photo/pink-lollipops-on-sticks-10171574/ | Skyler Ewing | Pexels License |
 | brownies.jpg | https://www.pexels.com/photo/delicious-stack-of-homemade-chocolate-brownies-30924034/ | Dalia Aguilar Ochoa | Pexels License |
 | chocolate-covered-strawberries.jpg | https://www.pexels.com/photo/photo-of-chocolate-coated-strawberry-on-ceramic-plate-5619164/ | Leeloo The First | Pexels License |

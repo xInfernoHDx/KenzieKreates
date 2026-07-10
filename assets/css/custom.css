@@ -1,17 +1,18 @@
 /* =========================================================
    Kenzy Kreates — theme styles
-   Palette: warm cream base, deep cocoa text, blush warmth,
-   ONE berry accent reserved for order actions and links.
-   Type: DM Serif Display (display) + DM Sans (body/UI).
-   Radius system: cards 16px, inputs 10px, buttons pill.
+   A young baker's brand: bright frosting-pink energy on a
+   warm cream base, cocoa text for readability, ONE raspberry
+   accent reserved for order actions and links.
+   Type: Fredoka (rounded display) + DM Sans (body/UI).
+   Radius system: cards 20px, inputs 10px, buttons pill.
    ========================================================= */
 
 :root {
-  /* Cream (surfaces) */
-  --cream-50:  #fdf9f4;
-  --cream-100: #f7efe6;
-  --cream-200: #efe3d5;
-  --cream-300: #e3d2bf;
+  /* Cream (surfaces, warmed slightly toward pink) */
+  --cream-50:  #fdf8f7;
+  --cream-100: #f9efed;
+  --cream-200: #f2e1dd;
+  --cream-300: #e7cec8;
 
   /* Cocoa (text / dark surfaces) */
   --cocoa-900: #2e211b;
@@ -19,20 +20,26 @@
   --cocoa-600: #5d4a40;
   --cocoa-400: #8a766b;
 
-  /* Blush (warmth, soft washes) */
-  --blush-100: #f8e7e2;
-  --blush-200: #f0d2ca;
-  --blush-400: #d9a294;
+  /* Frosting pink (washes, frames, soft fills) */
+  --blush-100: #fbe4ee;
+  --blush-200: #f6c7db;
+  --blush-400: #ec93bb;
 
-  /* Berry (THE accent — CTAs, links, focus) */
-  --berry-500: #b04463;
-  --berry-600: #98304d;
-  --berry-700: #7d2740;
+  /* Raspberry (THE accent — CTAs, links, focus) */
+  --berry-500: #dd5b95;
+  --berry-600: #c23370;
+  --berry-700: #a1275c;
+
+  /* Sprinkle decor colors (decorative only, low opacity) */
+  --sprk-pink: #ec93bb;
+  --sprk-gold: #ecc35c;
+  --sprk-teal: #6cc4b3;
+  --sprk-lav:  #bfa1e8;
 
   --white: #ffffff;
 
   /* Type */
-  --font-display: "DM Serif Display", Georgia, serif;
+  --font-display: "Fredoka", "Trebuchet MS", "Segoe UI", sans-serif;
   --font-sans: "DM Sans", -apple-system, "Segoe UI", sans-serif;
 
   /* Spacing */
@@ -51,8 +58,8 @@
   --max-w: 1140px;
   --pad: clamp(1rem, 4vw, 2rem);
 
-  /* Radius system: cards 16, inputs 10, buttons pill */
-  --r-card: 16px;
+  /* Radius system: cards 20, inputs 10, buttons pill */
+  --r-card: 20px;
   --r-input: 10px;
   --r-pill: 999px;
 
@@ -96,8 +103,8 @@ img {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.12;
+  font-weight: 600;
+  line-height: 1.15;
   color: var(--cocoa-900);
   margin: 0 0 var(--sp-4);
 }
@@ -236,9 +243,9 @@ a:hover {
 
 .brand-name {
   font-family: var(--font-display);
-  font-style: italic;
+  font-weight: 600;
   font-size: 1.55rem;
-  color: var(--cocoa-900);
+  color: var(--berry-600);
   display: block;
 }
 
@@ -351,11 +358,39 @@ a:hover {
   .nav-toggle { display: block; }
 }
 
+/* ---------- Sprinkle decor (static, decorative only) ---------- */
+
+.sprinkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.sprinkle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 16px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--c);
+  opacity: 0.5;
+  transform: rotate(var(--r));
+}
+
 /* ---------- Hero (split, asymmetric) ---------- */
 
 .hero {
+  position: relative;
   padding: var(--sp-10) 0 var(--sp-12);
   overflow: hidden;
+}
+
+.hero > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-grid {
@@ -533,11 +568,18 @@ a:hover {
 /* ---------- Custom orders callout ---------- */
 
 .callout {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(160deg, var(--blush-100), var(--cream-100));
   border: 1px solid var(--blush-200);
   border-radius: calc(var(--r-card) + 8px);
   padding: clamp(var(--sp-6), 5vw, var(--sp-10));
   text-align: center;
+}
+
+.callout > :not(.sprinkles) {
+  position: relative;
+  z-index: 1;
 }
 
 .callout h2 {
@@ -817,6 +859,7 @@ a:hover {
 
 .faq-item summary {
   font-family: var(--font-display);
+  font-weight: 500;
   font-size: 1.15rem;
   color: var(--cocoa-900);
   cursor: pointer;

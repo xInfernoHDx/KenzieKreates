@@ -14,14 +14,17 @@ get_header();
 <section class="section">
 	<div class="container split--flip split">
 		<div>
-			<h1>The two of us, one sweet idea</h1>
-			<p class="hero-lede">Kenzy Kreates is the home bakery of <?php echo esc_html( $kk['owners'] ); ?>, baking treats and sweets from our Florida kitchen.</p>
+			<h1>Meet Kenzie, the baker behind Kenzy Kreates</h1>
+			<p class="hero-lede">Kenzy Kreates is Kenzie's home bakery, baking treats and sweets from our Florida kitchen with Adam's help.</p>
 
-			<!-- OWNER INPUT: replace this paragraph with how Kenzy Kreates actually started. -->
-			<p>What began as baking for family and friends grew into something we get to share with our whole community. Every cookie, cake pop, and brownie that leaves our kitchen is baked to order, decorated by hand, and packed up like it is headed to someone we love. Because it is.</p>
+			<!-- OWNER INPUT: replace this paragraph with how Kenzy Kreates actually started.
+			     If Kenzie wants to share her young-baker story here (how she got started,
+			     being a student entrepreneur), it is a story customers love. We left her
+			     age out by default for privacy; adding it is the owners' call. -->
+			<p>What began as Kenzie baking for family and friends grew into something she gets to share with the whole community. Every cookie, cake pop, and brownie that leaves the kitchen is baked to order, decorated by hand, and packed up like it is headed to someone she loves. Because it is.</p>
 
-			<!-- OWNER INPUT: a paragraph about Adam & McKenzie themselves (how you met baking, who decorates, who does the dishes...). -->
-			<p>We keep our menu small on purpose so that everything is fresh, and we love a challenge. If you can picture it on your party table, chances are we can bake it.</p>
+			<!-- OWNER INPUT: a paragraph about Kenzie & Adam (who decorates, who does the dishes...). -->
+			<p>We keep our menu small on purpose so that everything is fresh, and Kenzie loves a challenge. If you can picture it on your party table, chances are she can bake it.</p>
 
 			<a class="btn btn--primary" href="<?php echo esc_url( home_url( '/menu/#custom-orders' ) ); ?>">Order Treats</a>
 		</div>
@@ -50,7 +53,7 @@ get_header();
 			<div class="step reveal">
 				<div class="step-icon" aria-hidden="true">&#8962;</div>
 				<h3>A real home kitchen</h3>
-				<p>We are a Florida cottage food operation. You are buying straight from the bakers.</p>
+				<p>We are a Florida cottage food operation. You are buying straight from the baker.</p>
 			</div>
 		</div>
 	</div>
