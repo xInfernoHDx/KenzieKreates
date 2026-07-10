@@ -732,13 +732,15 @@ a:hover {
 
 .menu-item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-2) var(--sp-3);
   padding: var(--sp-2) var(--sp-3);
   border: 2px solid transparent;
   border-radius: var(--r-input);
   transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
+
 
 .menu-item--orderable {
   cursor: pointer;
@@ -762,7 +764,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  margin-left: var(--sp-2);
+  margin-left: auto;
 }
 
 .qty-btn {
@@ -822,34 +824,44 @@ a:hover {
   border-color: var(--blush-200);
 }
 
-/* ---------- Cart: dozen chips (clickable) ---------- */
+/* ---------- Cart: per-item "+ Dozen" pill ---------- */
 
-.dozen-chip--btn {
-  cursor: pointer;
-  font-family: var(--font-sans);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-2);
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-
-.dozen-chip--btn:hover {
-  background: var(--berry-600);
-  border-color: var(--berry-600);
-  color: var(--white);
-}
-
-.dozen-chip-add {
-  font-weight: 700;
+.dozen-add-btn {
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--berry-600);
+  background: var(--white);
   color: var(--berry-600);
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
-.dozen-chip--btn:hover .dozen-chip-add {
+.dozen-add-btn:hover {
+  background: var(--berry-600);
   color: var(--white);
 }
 
-.dozen-chip--btn.in-cart {
-  border-color: var(--berry-500);
+.dozen-add-btn:active {
+  transform: scale(0.95);
+}
+
+/* ---------- Cart: mix & match dozen row ---------- */
+
+.menu-item--mix {
+  background: var(--blush-100);
+  border-color: var(--blush-200);
+}
+
+.menu-item--mix .menu-item-name {
+  color: var(--berry-700);
+}
+
+.menu-item--mix .menu-item-dots {
+  border-bottom-color: var(--blush-200);
 }
 
 .cart-line-deal {

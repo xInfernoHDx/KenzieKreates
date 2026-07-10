@@ -134,18 +134,8 @@ document.documentElement.classList.add('has-js');
     };
   });
 
-  // Category "mix and match" dozen chips.
-  var dozenChips = document.querySelectorAll('.dozen-chip--btn[data-dozen-id]');
-  dozenChips.forEach(function (chip) {
-    catalog[chip.getAttribute('data-dozen-id')] = {
-      name: chip.getAttribute('data-dozen-name'),
-      price: parseFloat(chip.getAttribute('data-dozen-price')) || 0,
-      dozenPrice: 0,
-      notePrompt: chip.getAttribute('data-dozen-note-prompt') || '',
-      el: chip,
-      kind: 'dozen'
-    };
-  });
+  // Mix & match dozen rows register through the same item machinery
+  // (they are .menu-item--orderable rows with a dozen-{category} id).
 
   var cart = {};
   try {
@@ -297,10 +287,6 @@ document.documentElement.classList.add('has-js');
           badge.textContent = qty;
         }
       }
-      var dozenLabel = el.querySelector('[data-dozen-label]');
-      if (dozenLabel) {
-        dozenLabel.textContent = qty > 0 ? 'In cart: ' + qty : '+ Add';
-      }
       el.classList.toggle('in-cart', qty > 0);
       count += qty;
       total += linePrice(id, qty);
@@ -367,6 +353,8 @@ document.documentElement.classList.add('has-js');
       }
       if (e.target.closest('[data-cart-minus]')) {
         changeQty(id, -1);
+      } else if (e.target.closest('[data-cart-dozen]')) {
+        changeQty(id, 12);
       } else {
         changeQty(id, 1);
       }
@@ -377,13 +365,6 @@ document.documentElement.classList.add('has-js');
         setQty(id, parseInt(qtyField.value, 10));
       });
     }
-  });
-
-  // Dozen chips: each click adds one mix-and-match dozen.
-  dozenChips.forEach(function (chip) {
-    chip.addEventListener('click', function () {
-      changeQty(chip.getAttribute('data-dozen-id'), 1);
-    });
   });
 
   // Panel line steppers (delegated: lines are rebuilt on every render).

@@ -36,14 +36,7 @@ get_header();
 				<div class="menu-cat-head">
 					<h2><?php echo esc_html( $cat['title'] ); ?></h2>
 					<?php if ( ! empty( $cat['dozen'] ) ) : ?>
-						<button type="button" class="dozen-chip dozen-chip--btn"
-							data-dozen-id="<?php echo esc_attr( 'dozen-' . $cat_key ); ?>"
-							data-dozen-name="<?php echo esc_attr( 'A Dozen ' . $cat['title'] . ' (mix and match)' ); ?>"
-							data-dozen-price="<?php echo esc_attr( kk_item_price_num( $cat['dozen'] ) ); ?>"
-							data-dozen-note-prompt="Which flavors would you like in your dozen?">
-							A dozen: <?php echo esc_html( $cat['dozen'] ); ?>
-							<span class="dozen-chip-add" data-dozen-label>+ Add</span>
-						</button>
+						<span class="dozen-chip">A dozen: <?php echo esc_html( $cat['dozen'] ); ?></span>
 					<?php endif; ?>
 				</div>
 				<p class="menu-cat-tagline"><?php echo esc_html( $cat['tagline'] ); ?></p>
@@ -99,10 +92,34 @@ get_header();
 									<button type="button" class="qty-btn" data-cart-minus aria-label="Remove one <?php echo esc_attr( $item['name'] ); ?>">&#8722;</button>
 									<input type="number" class="qty-input" data-cart-count inputmode="numeric" min="0" max="999" value="0" aria-label="Quantity of <?php echo esc_attr( $item['name'] ); ?>">
 									<button type="button" class="qty-btn" data-cart-plus aria-label="Add one <?php echo esc_attr( $item['name'] ); ?>">+</button>
+									<?php if ( ! empty( $cat['dozen'] ) ) : ?>
+										<button type="button" class="dozen-add-btn" data-cart-dozen aria-label="Add a dozen <?php echo esc_attr( $item['name'] ); ?>">+ Dozen</button>
+									<?php endif; ?>
 								</span>
 							<?php endif; ?>
 						</li>
 					<?php endforeach; ?>
+
+					<?php if ( ! empty( $cat['dozen'] ) ) : ?>
+						<li class="menu-item menu-item--orderable menu-item--mix"
+							data-item-id="<?php echo esc_attr( 'dozen-' . $cat_key ); ?>"
+							data-item-name="<?php echo esc_attr( 'A Dozen ' . $cat['title'] . ' (mix & match)' ); ?>"
+							data-item-price="<?php echo esc_attr( kk_item_price_num( $cat['dozen'] ) ); ?>"
+							data-item-note-prompt="Which flavors would you like in your dozen?"
+						>
+							<span class="menu-item-name">
+								Mix &amp; Match Dozen
+								<span class="menu-item-note">(your choice of flavors)</span>
+							</span>
+							<span class="menu-item-dots" aria-hidden="true"></span>
+							<span class="menu-item-price"><?php echo esc_html( $cat['dozen'] ); ?> <small>per dozen</small></span>
+							<span class="menu-item-cart">
+								<button type="button" class="qty-btn" data-cart-minus aria-label="Remove one mix and match dozen of <?php echo esc_attr( $cat['title'] ); ?>">&#8722;</button>
+								<input type="number" class="qty-input" data-cart-count inputmode="numeric" min="0" max="999" value="0" aria-label="Number of mix and match dozens of <?php echo esc_attr( $cat['title'] ); ?>">
+								<button type="button" class="qty-btn" data-cart-plus aria-label="Add one mix and match dozen of <?php echo esc_attr( $cat['title'] ); ?>">+</button>
+							</span>
+						</li>
+					<?php endif; ?>
 				</ul>
 			</div>
 		<?php endforeach; ?>
