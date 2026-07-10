@@ -39,7 +39,7 @@ return array(
 				'name'  => 'Sugar Cookies (decorated)',
 				'price' => '$3.00',
 				'per'   => 'each',
-				'image' => 'decorated-sugar-cookies',
+				'image' => 'sugar-cookies-decorated',
 			),
 			array(
 				'name'  => 'Oatmeal Raisin',

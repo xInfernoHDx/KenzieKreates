@@ -24,7 +24,7 @@ modern browsers for faster loading.
 |---|---|
 | `hero-bakes.jpg` | Home page hero (the big one — make it your best spread) |
 | `chocolate-chip-cookies.jpg` | Featured grid + menu |
-| `decorated-sugar-cookies.jpg` | Featured grid + menu (currently holiday-themed stock — replace soon) |
+| `sugar-cookies-decorated.jpg` | Featured grid + menu (pastel royal-icing cookies) |
 | `cake-pops.jpg` | Featured grid + menu |
 | `brownies.jpg` | Featured grid + menu |
 | `chocolate-covered-strawberries.jpg` | Featured grid + menu |
